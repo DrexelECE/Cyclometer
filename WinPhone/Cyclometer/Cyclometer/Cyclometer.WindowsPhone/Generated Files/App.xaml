@@ -1,0 +1,13 @@
+﻿<Application
+    x:Class="Cyclometer.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Cyclometer"
+    RequestedTheme="Dark">
+
+    <Application.Resources>
+        <x:String x:Key="AppName">Cyclometer</x:String>
+    </Application.Resources>
+
+</Application>
+
