@@ -1,29 +1,29 @@
 // TimerOne library: https://code.google.com/p/arduino-timerone/
-#include <TimerOne.h>
-// DHT library: https://github.com/adafruit/DHT-sensor-library
-//#include "DHT.h"
+#include <TimerOne.h> // KURTZ: remove?
+
+
 #include <SPI.h>
 #include <BLEPeripheral.h>
 
-// define pins (varies per shield/board)
-#define BLE_REQ   10
-#define BLE_RDY   2
-#define BLE_RST   9
+// define pins (varies per shield/board) See http://redbearlab.com/blendmicro#technicaldetails
+#define BLE_REQ   10 // REQN
+#define BLE_RDY   2  // RDYN
+#define BLE_RST   9  // not really sure what this is. 
 
-#define DHTTYPE DHT22
-#define DHTPIN 3
+#define LED_PIN   13
 
-//DHT dht(DHTPIN, DHTTYPE);
+// service > characteristic > descriptor
 
 BLEPeripheral blePeripheral = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
-BLEService tempService = BLEService("CCC0");
-BLEFloatCharacteristic tempCharacteristic = BLEFloatCharacteristic("CCC1", BLERead | BLENotify);
-BLEDescriptor tempDescriptor = BLEDescriptor("2901", "Temp Celsius");
+BLEService cscService = BLEService("1816"); // https://developer.bluetooth.org/gatt/services/Pages/ServiceViewer.aspx?u=org.bluetooth.service.cycling_speed_and_cadence.xml
+BLEFloatCharacteristic cscMeasurementCharacteristic = BLEFloatCharacteristic("2A5B", BLERead | BLENotify); // Flags and stuff. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
+BLEFloatCharacteristic cscFeatureCharacteristic = BLEFloatCharacteristic("2A5C", BLERead | BLENotify);  // Describes supported features. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_feature.xml
 
-BLEService humidityService = BLEService("DDD0");
-BLEFloatCharacteristic humidityCharacteristic = BLEFloatCharacteristic("DDD1", BLERead | BLENotify);
-BLEDescriptor humidityDescriptor = BLEDescriptor("2901", "Humidity Percent");
+// Other CSC characteristics are considered optional for this application and are thus not being developed. 
+
+//BLEDescriptor tempDescriptor = BLEDescriptor("2901", "Temp Celsius"); // sample Descriptor declaration
+
 
 volatile bool readFromSensor = false;
 
@@ -39,17 +39,16 @@ void setup() {
   delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
 #endif
 
-  blePeripheral.setLocalName("Temperature");
+  blePeripheral.setLocalName("Cyclometer");
   
-  blePeripheral.setAdvertisedServiceUuid(tempService.uuid());
-  blePeripheral.addAttribute(tempService);
-  blePeripheral.addAttribute(tempCharacteristic);
-  blePeripheral.addAttribute(tempDescriptor);
+  blePeripheral.setAdvertisedServiceUuid(cscService.uuid());
+  blePeripheral.addAttribute(cscService);
+  blePeripheral.addAttribute(cscMeasurementCharacteristic);
+  blePeripheral.addAttribute(cscFeatureCharacteristic);
+ 
+  // the above section would be repeated as needed for other services. 
   
-  blePeripheral.setAdvertisedServiceUuid(humidityService.uuid());
-  blePeripheral.addAttribute(humidityService);
-  blePeripheral.addAttribute(humidityCharacteristic);
-  blePeripheral.addAttribute(humidityDescriptor);
+//  blePeripheral.addAttribute(humidityDescriptor);
 
   blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
@@ -59,7 +58,7 @@ void setup() {
 //  Timer1.initialize(2 * 1000000); // in milliseconds
 //  Timer1.attachInterrupt(timerHandler);
   
-  Serial.println(F("BLE Temperature Sensor Peripheral"));
+  Serial.println(F("BLE Cycling Speed and Cadence Sensor"));
 }
 
 void loop() {
@@ -76,35 +75,35 @@ void timerHandler() {
   readFromSensor = true;
 }
 
-void setTempCharacteristicValue() {
-//  float reading = dht.readTemperature();
-    float reading = random(100);
-  
-  if (!isnan(reading) && significantChange(lastTempReading, reading, 0.5)) {
-    tempCharacteristic.setValue(reading);
-    
-    Serial.print(F("Temperature: ")); Serial.print(reading); Serial.println(F("C"));
-    
-    lastTempReading = reading;
-  }
-}
+//void setTempCharacteristicValue() {
+////  float reading = dht.readTemperature();
+//    float reading = random(100);
+//  
+//  if (!isnan(reading) && significantChange(lastTempReading, reading, 0.5)) {
+//    tempCharacteristic.setValue(reading);
+//    
+//    Serial.print(F("Temperature: ")); Serial.print(reading); Serial.println(F("C"));
+//    
+//    lastTempReading = reading;
+//  }
+//}
 
-void setHumidityCharacteristicValue() {
-//  float reading = dht.readHumidity();
-  float reading = random(100);
+//void setHumidityCharacteristicValue() {
+////  float reading = dht.readHumidity();
+//  float reading = random(100);
+//
+//  if (!isnan(reading) && significantChange(lastHumidityReading, reading, 1.0)) {
+//    humidityCharacteristic.setValue(reading);
+//    
+//    Serial.print(F("Humidity: ")); Serial.print(reading); Serial.println(F("%"));
+//    
+//    lastHumidityReading = reading;
+//  }
+//}
 
-  if (!isnan(reading) && significantChange(lastHumidityReading, reading, 1.0)) {
-    humidityCharacteristic.setValue(reading);
-    
-    Serial.print(F("Humidity: ")); Serial.print(reading); Serial.println(F("%"));
-    
-    lastHumidityReading = reading;
-  }
-}
-
-boolean significantChange(float val1, float val2, float threshold) {
-  return (abs(val1 - val2) >= threshold);
-}
+//boolean significantChange(float val1, float val2, float threshold) {
+//  return (abs(val1 - val2) >= threshold);
+//}
 
 void blePeripheralConnectHandler(BLECentral& central) {
   Serial.print(F("Connected event, central: "));
