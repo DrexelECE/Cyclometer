@@ -15,14 +15,17 @@
 
 #define LED_PIN   13
 
-// service > characteristic > descriptor
+// peripheral > service > characteristic > descriptor
 
+// create peripheral instance, see pinouts above
 BLEPeripheral blePeripheral = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
+// create service
 BLEService cscService = BLEService("1816"); // https://developer.bluetooth.org/gatt/services/Pages/ServiceViewer.aspx?u=org.bluetooth.service.cycling_speed_and_cadence.xml
+
+// create characteristic
 BLECharacteristic cscMeasurementCharacteristic = BLEFloatCharacteristic("2A5B", BLERead | BLENotify); // Flags and stuff. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
 BLECharacteristic cscFeatureCharacteristic = BLEFloatCharacteristic("2A5C", BLERead | BLENotify);  // Describes supported features. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_feature.xml
-
 
 
 // Other CSC characteristics are considered optional for this application and are thus not being developed. 
@@ -46,21 +49,27 @@ void setup() {
   delay(5000);  //5 seconds delay for enabling to see the start up comments on the serial board
 #endif
 
-  blePeripheral.setLocalName("Cyclometer");
+  /*----- start BLE Utility --------*/
   
+  // set advertised local name and service UUID
+  blePeripheral.setLocalName("Cyclometer");
   blePeripheral.setAdvertisedServiceUuid(cscService.uuid());
+
+  // add service and characteristic
   blePeripheral.addAttribute(cscService);
   blePeripheral.addAttribute(cscMeasurementCharacteristic);
   blePeripheral.addAttribute(cscFeatureCharacteristic);
  
   // the above section would be repeated as needed for other services. 
-  
-//  blePeripheral.addAttribute(humidityDescriptor);
 
+  // add event handlers for connections being created and lost. 
   blePeripheral.setEventHandler(BLEConnected, blePeripheralConnectHandler);
   blePeripheral.setEventHandler(BLEDisconnected, blePeripheralDisconnectHandler);
 
+  // begin initialization
   blePeripheral.begin();
+
+  /*----- end BLE Utility --------*/
   
 
   attachInterrupt(SENSOR_INT, incrementWheel, RISING);
