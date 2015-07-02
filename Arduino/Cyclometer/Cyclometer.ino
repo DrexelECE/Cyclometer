@@ -1,5 +1,5 @@
 // TimerOne library: https://code.google.com/p/arduino-timerone/
-#include <TimerOne.h> // KURTZ: remove?
+//#include <TimerOne.h> // KURTZ: remove?
 
 
 #include <SPI.h>
@@ -10,6 +10,9 @@
 #define BLE_RDY   2  // RDYN
 #define BLE_RST   9  // not really sure what this is. 
 
+#define SENSOR_PIN    3  // the pin to which the magnetic sensor is attached
+#define SENSOR_INT    1  // the interrupt number for the sensor. 
+
 #define LED_PIN   13
 
 // service > characteristic > descriptor
@@ -17,18 +20,22 @@
 BLEPeripheral blePeripheral = BLEPeripheral(BLE_REQ, BLE_RDY, BLE_RST);
 
 BLEService cscService = BLEService("1816"); // https://developer.bluetooth.org/gatt/services/Pages/ServiceViewer.aspx?u=org.bluetooth.service.cycling_speed_and_cadence.xml
-BLEFloatCharacteristic cscMeasurementCharacteristic = BLEFloatCharacteristic("2A5B", BLERead | BLENotify); // Flags and stuff. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
-BLEFloatCharacteristic cscFeatureCharacteristic = BLEFloatCharacteristic("2A5C", BLERead | BLENotify);  // Describes supported features. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_feature.xml
+BLECharacteristic cscMeasurementCharacteristic = BLEFloatCharacteristic("2A5B", BLERead | BLENotify); // Flags and stuff. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
+BLECharacteristic cscFeatureCharacteristic = BLEFloatCharacteristic("2A5C", BLERead | BLENotify);  // Describes supported features. https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_feature.xml
+
+
 
 // Other CSC characteristics are considered optional for this application and are thus not being developed. 
 
 //BLEDescriptor tempDescriptor = BLEDescriptor("2901", "Temp Celsius"); // sample Descriptor declaration
 
 
-volatile bool readFromSensor = false;
+volatile bool newSensorData = false;
 
-float lastTempReading;
-float lastHumidityReading;
+byte flags = B01; // has wheel data; doesn't have crank data. 
+volatile unsigned long cumWheelRevs = 0; // unsigned long is equivalent to uint32
+volatile unsigned int lastWheelEventTime = 0; // unsigned long is equivalent to uint16
+
 
 void setup() {
   Serial.begin(115200);
@@ -55,8 +62,8 @@ void setup() {
 
   blePeripheral.begin();
   
-//  Timer1.initialize(2 * 1000000); // in milliseconds
-//  Timer1.attachInterrupt(timerHandler);
+
+  attachInterrupt(SENSOR_INT, incrementWheel, RISING);
   
   Serial.println(F("BLE Cycling Speed and Cadence Sensor"));
 }
@@ -64,51 +71,32 @@ void setup() {
 void loop() {
   blePeripheral.poll();
   
-  if (readFromSensor) {
-    setTempCharacteristicValue();
-    setHumidityCharacteristicValue();
-    readFromSensor = false;
+  if (newSensorData) {
+    setMeasurementCharacteristicValue();
+    newSensorData = false;
   }
 }
 
-void timerHandler() {
-  readFromSensor = true;
+
+void incrementWheel() {
+  cumWheelRevs++; 
+  lastWheelEventTime = millis() * 1.024; // concerting from millis to 1/1024 sec, as required by BLE spec. 
+  newSensorData = true;
 }
 
-//void setTempCharacteristicValue() {
-////  float reading = dht.readTemperature();
-//    float reading = random(100);
-//  
-//  if (!isnan(reading) && significantChange(lastTempReading, reading, 0.5)) {
-//    tempCharacteristic.setValue(reading);
-//    
-//    Serial.print(F("Temperature: ")); Serial.print(reading); Serial.println(F("C"));
-//    
-//    lastTempReading = reading;
-//  }
-//}
 
-//void setHumidityCharacteristicValue() {
-////  float reading = dht.readHumidity();
-//  float reading = random(100);
-//
-//  if (!isnan(reading) && significantChange(lastHumidityReading, reading, 1.0)) {
-//    humidityCharacteristic.setValue(reading);
-//    
-//    Serial.print(F("Humidity: ")); Serial.print(reading); Serial.println(F("%"));
-//    
-//    lastHumidityReading = reading;
-//  }
-//}
+void setMeasurementCharacteristicValue() {
+  cscMeasurementCharacteristic.setValue(cumWheelRevs); // not the current data format. 
+  
+  Serial.print(F("Wheel Revs: ")); Serial.println(cumWheelRevs); // should take format defined by https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
+}
 
-//boolean significantChange(float val1, float val2, float threshold) {
-//  return (abs(val1 - val2) >= threshold);
-//}
 
 void blePeripheralConnectHandler(BLECentral& central) {
   Serial.print(F("Connected event, central: "));
   Serial.println(central.address());
 }
+
 
 void blePeripheralDisconnectHandler(BLECentral& central) {
   Serial.print(F("Disconnected event, central: "));
