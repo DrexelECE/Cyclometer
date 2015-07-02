@@ -1,70 +1,40 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30626.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cyclometer", "Cyclometer", "{48DEFB22-B2EE-44E2-97D7-E11BB380BA0C}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cyclometer.Shared", "Cyclometer\Cyclometer.Shared\Cyclometer.Shared.vcxitems", "{EA22A44B-0900-4538-894E-BFB30CC14D59}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cyclometer.Windows", "Cyclometer\Cyclometer.Windows\Cyclometer.Windows.vcxproj", "{45BBCDC5-F049-418A-8F13-4F4E4640514F}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Cyclometer.WindowsPhone", "Cyclometer\Cyclometer.WindowsPhone\Cyclometer.WindowsPhone.vcxproj", "{07A34998-6934-4AE6-9629-E54BA717CA16}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyclometer", "Cyclometer\Cyclometer.csproj", "{64BDA054-9180-4A45-93DD-2F18187DDA3A}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Cyclometer\Cyclometer.Shared\Cyclometer.Shared.vcxitems*{07a34998-6934-4ae6-9629-e54ba717ca16}*SharedItemsImports = 4
-		Cyclometer\Cyclometer.Shared\Cyclometer.Shared.vcxitems*{45bbcdc5-f049-418a-8f13-4f4e4640514f}*SharedItemsImports = 4
-		Cyclometer\Cyclometer.Shared\Cyclometer.Shared.vcxitems*{ea22a44b-0900-4538-894e-bfb30cc14d59}*SharedItemsImports = 9
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
-		Debug|Win32 = Debug|Win32
-		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
-		Release|Win32 = Release|Win32
-		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|ARM.ActiveCfg = Debug|ARM
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|ARM.Build.0 = Debug|ARM
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|ARM.Deploy.0 = Debug|ARM
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|Win32.ActiveCfg = Debug|Win32
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|Win32.Build.0 = Debug|Win32
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|Win32.Deploy.0 = Debug|Win32
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|x64.ActiveCfg = Debug|x64
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|x64.Build.0 = Debug|x64
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Debug|x64.Deploy.0 = Debug|x64
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|ARM.ActiveCfg = Release|ARM
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|ARM.Build.0 = Release|ARM
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|ARM.Deploy.0 = Release|ARM
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|Win32.ActiveCfg = Release|Win32
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|Win32.Build.0 = Release|Win32
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|Win32.Deploy.0 = Release|Win32
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|x64.ActiveCfg = Release|x64
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|x64.Build.0 = Release|x64
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F}.Release|x64.Deploy.0 = Release|x64
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|ARM.ActiveCfg = Debug|ARM
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|ARM.Build.0 = Debug|ARM
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|ARM.Deploy.0 = Debug|ARM
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|Win32.ActiveCfg = Debug|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|Win32.Build.0 = Debug|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|Win32.Deploy.0 = Debug|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Debug|x64.ActiveCfg = Debug|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|ARM.ActiveCfg = Release|ARM
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|ARM.Build.0 = Release|ARM
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|ARM.Deploy.0 = Release|ARM
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|Win32.ActiveCfg = Release|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|Win32.Build.0 = Release|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|Win32.Deploy.0 = Release|Win32
-		{07A34998-6934-4AE6-9629-E54BA717CA16}.Release|x64.ActiveCfg = Release|Win32
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|ARM.ActiveCfg = Debug|ARM
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|ARM.Build.0 = Debug|ARM
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|ARM.Deploy.0 = Debug|ARM
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|x86.ActiveCfg = Debug|x86
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|x86.Build.0 = Debug|x86
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Debug|x86.Deploy.0 = Debug|x86
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|ARM.ActiveCfg = Release|ARM
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|ARM.Build.0 = Release|ARM
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|ARM.Deploy.0 = Release|ARM
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|x86.ActiveCfg = Release|x86
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|x86.Build.0 = Release|x86
+		{64BDA054-9180-4A45-93DD-2F18187DDA3A}.Release|x86.Deploy.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{EA22A44B-0900-4538-894E-BFB30CC14D59} = {48DEFB22-B2EE-44E2-97D7-E11BB380BA0C}
-		{45BBCDC5-F049-418A-8F13-4F4E4640514F} = {48DEFB22-B2EE-44E2-97D7-E11BB380BA0C}
-		{07A34998-6934-4AE6-9629-E54BA717CA16} = {48DEFB22-B2EE-44E2-97D7-E11BB380BA0C}
 	EndGlobalSection
 EndGlobal
