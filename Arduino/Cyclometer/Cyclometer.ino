@@ -95,8 +95,16 @@ void incrementWheel() {
 
 
 void setMeasurementCharacteristicValue() {
-  cscMeasurementCharacteristic.setValue(cumWheelRevs); // not the current data format. 
-  
+  byte lastWheelMSB = lastWheelEventTime >> 8;
+  byte lastWheelLSB = lastWheelEventTime & 0xFF;
+  byte cumMSB = cumWheelRevs >> 24;
+  byte cumM2 = (cumWheelRevs >> 16) & 0xFF;
+  byte cumM3 = (cumWheelRevs >> 8) & 0xFF;
+  byte cumLSB = cumWheelRevs & 0xFF;
+  byte input[11] = [B0,B0,B0,B0,lastWheelLSB,lastWheelMSB,cumLSB,cumM3,cumM2,cumMSB,flags]; 
+  String inputString = String(input);
+  cscMeasurementCharacteristic.setValue(inputString); // not the current data format. 
+    
   Serial.print(F("Wheel Revs: ")); Serial.println(cumWheelRevs); // should take format defined by https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
 }
 
