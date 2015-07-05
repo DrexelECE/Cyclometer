@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
+	<Identity Name="25041Brilliant.Cyclometr" Publisher="CN=491D17D3-45C3-44F9-9851-B8EC68075F64" Version="0.0.1.0" />
+	<Properties>
+		<DisplayName>Cyclometer</DisplayName>
+		<PublisherDisplayName>Brilliant</PublisherDisplayName>
+		<Logo>Assets\storeLogo-sdk.png</Logo>
+		<!-- KURTZ remove MSFT refs -->
+	</Properties>
+	<Prerequisites>
+		<OSMinVersion>6.3.0</OSMinVersion>
+		<OSMaxVersionTested>6.3.0</OSMaxVersionTested>
+	</Prerequisites>
+	<Resources>
+		<Resource Language="x-generate" />
+	</Resources>
+	<Applications>
+		<Application Id="SDKSample.App" Executable="$targetnametoken$.exe" EntryPoint="SDKSample.App">
+			<m2:VisualElements DisplayName="Cyclometer" Description="Cyclometer" ForegroundText="light" BackgroundColor="#00b2f0" Square150x150Logo="Assets\squaretile-sdk.png" Square30x30Logo="Assets\smalltile-Windows-sdk.png">
+				<!-- KURTZ remove MSFT refs -->
+				<m2:DefaultTile ShortName="Cyclometer" DefaultSize="square150x150Logo" Wide310x150Logo="Assets\tile-sdk.png">
+					<!-- KURTZ remove MSFT refs -->
+					<m2:ShowNameOnTiles>
+						<m2:ShowOn Tile="square150x150Logo" />
+						<m2:ShowOn Tile="wide310x150Logo" />
+					</m2:ShowNameOnTiles>
+				</m2:DefaultTile>
+				<m2:SplashScreen Image="Assets\splash-Windows-sdk.png" BackgroundColor="#00b2f0" />
+				<!-- KURTZ remove MSFT refs -->
+				<m2:ApplicationView MinWidth="width320" />
+			</m2:VisualElements>
+		</Application>
+	</Applications>
+	<Capabilities>
+		<DeviceCapability Name="location" />
+		<m2:DeviceCapability Name="bluetooth.genericAttributeProfile">
+			<m2:Device Id="any">
+				<m2:Function Type="name:cyclingSpeedAndCadence" />
+			</m2:Device>
+			<m2:Device Id="any">
+				<m2:Function Type="name:heartRate" />
+			</m2:Device>
+		</m2:DeviceCapability>
+	</Capabilities>
+</Package>
