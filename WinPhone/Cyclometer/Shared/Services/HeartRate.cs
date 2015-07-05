@@ -30,7 +30,7 @@ namespace BluetoothGattHeartRate
 
     public delegate void DeviceConnectionUpdatedHandler(bool isConnected);
 
-    public class HeartRateService
+    public class HeartRateService : BLEBaseService
     {
         // Heart Rate Constants
 
@@ -45,11 +45,8 @@ namespace BluetoothGattHeartRate
 
         // A pointer back to the main page.  This is needed if you want to call methods in MainPage such
         // as NotifyUser().
-        MainPage rootPage = MainPage.Current;
 
         private static HeartRateService instance = new HeartRateService();
-        private GattDeviceService service;
-        private GattCharacteristic characteristic;
         private List<HeartRateMeasurement> datapoints;
         private PnpObjectWatcher watcher;
         private String deviceContainerId;
@@ -60,13 +57,6 @@ namespace BluetoothGattHeartRate
         public static HeartRateService Instance
         {
             get { return instance; }
-        }
-
-        public bool IsServiceInitialized { get; set; }
-
-        public GattDeviceService Service
-        {
-            get { return service; }
         }
 
         public HeartRateMeasurement[] DataPoints
@@ -90,13 +80,15 @@ namespace BluetoothGattHeartRate
             App.Current.Resuming += App_Resuming;
         }
 
-        private void App_Resuming(object sender, object e)
+        private new void App_Resuming(object sender, object e)
         {
+            base.App_Resuming(sender, e);
+
             // Since the Windows Runtime will close resources to the device when the app is suspended,
             // the device needs to be reinitialized when the app is resumed.
         }
 
-        private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
+        private new void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
             IsServiceInitialized = false;
 
@@ -108,16 +100,8 @@ namespace BluetoothGattHeartRate
             // The Windows runtime will clean up resources used by the GattDeviceService object when the application is
             // suspended. The GattDeviceService object will be invalid once the app resumes, which is why it must be 
             // marked as invalid, and reinitalized when the application resumes.
-            if (service != null)
-            {
-                service.Dispose();
-                service = null;
-            }
 
-            if (characteristic != null)
-            {
-                characteristic = null;
-            }
+            base.App_Suspending(sender, e);
 
             if (watcher != null)
             {

@@ -31,6 +31,7 @@
     </Compile>
     <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\HeartRate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Services\_BLEBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)Assets\mediumtile-sdk.png" />
