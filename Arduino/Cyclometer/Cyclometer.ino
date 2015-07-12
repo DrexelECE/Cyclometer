@@ -101,9 +101,9 @@ void setMeasurementCharacteristicValue() {
   byte cumM2 = (cumWheelRevs >> 16) & 0xFF;
   byte cumM3 = (cumWheelRevs >> 8) & 0xFF;
   byte cumLSB = cumWheelRevs & 0xFF;
-  byte input[11] = [B0,B0,B0,B0,lastWheelLSB,lastWheelMSB,cumLSB,cumM3,cumM2,cumMSB,flags]; 
-  String inputString = String(input);
-  cscMeasurementCharacteristic.setValue(inputString); // not the current data format. 
+  byte input[11] = {B0,B0,B0,B0,lastWheelLSB,lastWheelMSB,cumLSB,cumM3,cumM2,cumMSB,flags}; 
+  //String inputString(input);
+  cscMeasurementCharacteristic.setValue(input, 11); // just passing the byte array directly, with the length. No compile error 
     
   Serial.print(F("Wheel Revs: ")); Serial.println(cumWheelRevs); // should take format defined by https://developer.bluetooth.org/gatt/characteristics/Pages/CharacteristicViewer.aspx?u=org.bluetooth.characteristic.csc_measurement.xml
 }
